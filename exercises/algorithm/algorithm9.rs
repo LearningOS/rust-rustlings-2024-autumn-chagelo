@@ -2,10 +2,10 @@
 	heap
 	This question requires you to implement a binary heap function
 */
-// I AM NOT DONE
 
 use std::cmp::Ord;
 use std::default::Default;
+use std::mem::swap;
 
 pub struct Heap<T>
 where
@@ -38,6 +38,42 @@ where
 
     pub fn add(&mut self, value: T) {
         //TODO
+        self.items.push(value);
+        self.count += 1;
+        let mut cur_idx = self.len();
+
+        while cur_idx > 0 {
+            if self.children_present(cur_idx) {
+                let smallest_child_idx = self.smallest_child_idx(cur_idx);
+                if (self.comparator)(&self.items[smallest_child_idx], &self.items[cur_idx]) {
+                    self.items.swap(smallest_child_idx, cur_idx);
+                }
+            }
+            cur_idx = self.parent_idx(cur_idx);
+        }
+    }
+    pub fn pop(&mut self) -> Option<T> {
+        if self.len() == 0 {
+            None
+        } else {
+            let mut cur_idx = self.len();
+            self.items.swap(1, cur_idx);
+            let ret_val = self.items.pop();
+            self.count -= 1;
+            cur_idx = self.parent_idx(cur_idx);
+
+            while cur_idx > 0 {
+                if self.children_present(cur_idx) {
+                    let smallest_child_idx = self.smallest_child_idx(cur_idx);
+                    if (self.comparator)(&self.items[smallest_child_idx], &self.items[cur_idx]) {
+                        self.items.swap(smallest_child_idx, cur_idx);
+                    }
+                }
+                cur_idx = self.parent_idx(cur_idx);
+            }
+
+            ret_val
+        }
     }
 
     fn parent_idx(&self, idx: usize) -> usize {
@@ -58,7 +94,16 @@ where
 
     fn smallest_child_idx(&self, idx: usize) -> usize {
         //TODO
-		0
+        let left_child_idx = self.left_child_idx(idx);
+        if left_child_idx == self.len() {
+            return left_child_idx;
+        }
+        let right_child_idx = self.right_child_idx(idx);
+        if (self.comparator)(&self.items[left_child_idx], &self.items[right_child_idx]) {
+            left_child_idx
+        } else {
+            right_child_idx
+        }
     }
 }
 
@@ -85,7 +130,7 @@ where
 
     fn next(&mut self) -> Option<T> {
         //TODO
-		None
+        self.pop()
     }
 }
 
