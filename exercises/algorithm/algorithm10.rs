@@ -1,6 +1,6 @@
 /*
-	graph
-	This problem requires you to implement a basic graph functio
+    graph
+    This problem requires you to implement a basic graph functio
 */
 
 use std::collections::{HashMap, HashSet};
@@ -28,17 +28,18 @@ impl Graph for UndirectedGraph {
         &self.adjacency_table
     }
     fn add_edge(&mut self, edge: (&str, &str, i32)) {
-        //TODO
         if let Some(to_vec) = self.adjacency_table.get_mut(edge.0) {
             to_vec.push((edge.1.to_string(), edge.2));
         } else {
-            self.adjacency_table.insert(edge.0.to_string(), vec![(edge.1.to_string(), edge.2)]);
+            self.adjacency_table
+                .insert(edge.0.to_string(), vec![(edge.1.to_string(), edge.2)]);
         }
 
         if let Some(to_vec) = self.adjacency_table.get_mut(edge.1) {
             to_vec.push((edge.0.to_string(), edge.2));
         } else {
-            self.adjacency_table.insert(edge.1.to_string(), vec![(edge.0.to_string(), edge.2)]);
+            self.adjacency_table
+                .insert(edge.1.to_string(), vec![(edge.0.to_string(), edge.2)]);
         }
     }
 }
@@ -48,7 +49,7 @@ pub trait Graph {
     fn adjacency_table(&self) -> &HashMap<String, Vec<(String, i32)>>;
     fn add_node(&mut self, node: &str) -> bool {
         //TODO
-		true
+        true
     }
     fn add_edge(&mut self, edge: (&str, &str, i32)) {
         //TODO
